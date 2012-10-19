@@ -2,7 +2,8 @@ Big Red Button [![Build Status](https://secure.travis-ci.org/openplans/bigredbut
 ==============================
 
 This is a simple [Shareabouts](https://github.com/openplans/shareabouts) client
-app designed to quickly collect public demand for, well, anything.
+app designed to quickly collect public demand for, well, anything. It's named
+after the infamous [Big Red Button](http://en.wikipedia.org/wiki/Big_red_button).
 
 It's built on the Shareabouts Django starter kit to easily integrate with the
 [Shareabouts API](https://github.com/openplans/shareabouts-api).
