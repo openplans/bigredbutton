@@ -1,6 +1,11 @@
 var BigRedButton = BigRedButton || {};
 
 (function(B, $) {
+  var ip = 'Not Set';
+  var setIp = function(data) {
+    ip = data.ip;
+  };
+
   var save = function(data) {
       $.ajax({
         url: '/api/places/',
@@ -32,7 +37,8 @@ var BigRedButton = BigRedButton || {};
             lat: position.coords.latitude,
             lng: position.coords.longitude
           },
-          accuracy: position.coords.accuracy
+          accuracy: position.coords.accuracy,
+          submitter_name: ip
         };
 
         if (data.geonames.length) {
@@ -58,6 +64,8 @@ var BigRedButton = BigRedButton || {};
   } else {
     alert('Geolocation services are not supported by your browser.');
   }
+
+  $.getJSON('http://jsonip.com/?callback=?', setIp);
 
 })(BigRedButton, jQuery);
 
