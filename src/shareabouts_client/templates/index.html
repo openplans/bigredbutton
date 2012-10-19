@@ -13,15 +13,32 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=IE7">
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
-  <title>Shareabouts Client</title>
+  <title>Big Red Button</title>
+
+  <link href="{{ STATIC_URL }}lib/bootstrap-2.1.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}lib/bootstrap-2.1.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="{{ STATIC_URL }}style.css" rel="stylesheet">
 </head>
 <body>
-  
-  <h1>Get started!</h1>
-  <ul>
-    <li>Your dataset root is <a href="{% url 'api_proxy' ''%}">{% url 'api_proxy' '' %}</a></li>
-  </ul>
+  <div id="content" class="container">
 
+  <div id="title">I could really use a <strong>bike share</strong> right now.</div>
+
+  <button id="theonebutton" class="btn btn-large btn-danger" type="button">Let it be known</button>
+
+  </div> <!-- /container -->
+
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+  <script src="{{ STATIC_URL }}lib/bootstrap-2.1.1/js/bootstrap.js"></script>
+  <script src="{{ STATIC_URL }}main.js"></script>
 </body>
 </html>
