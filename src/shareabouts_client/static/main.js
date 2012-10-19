@@ -1,15 +1,31 @@
 var BigRedButton = BigRedButton || {};
 
 (function(B, $) {
-  var getAccurateLocation = function() {
-    var onSuccess = function(position) {
+  var save = function(data) {
       $.ajax({
         url: '/api/places/',
         type: 'POST',
         dataType: 'json',
         contentType: 'application/json',
         processData: false,
-        data: JSON.stringify({
+        data: data,
+        success: function() {
+          alert('It is known.');
+        }
+      });
+  };
+
+  var reverseGeocode = function(lat, lng, callback) {
+    var url = 'http://api.geonames.org/findNearbyJSON?lat='+lat+
+      '&lng='+lng+'&username=openplans&callback=?';
+
+    $.getJSON(url, callback);
+  };
+
+  var getAccurateLocation = function() {
+    var onSuccess = function(position) {
+      reverseGeocode(position.coords.latitude, position.coords.longitude, function(data) {
+        var toSave = {
           visible: true,
           location_type: 'bikeshare',
           location: {
@@ -17,10 +33,13 @@ var BigRedButton = BigRedButton || {};
             lng: position.coords.longitude
           },
           accuracy: position.coords.accuracy
-        }),
-        success: function() {
-          alert('It is known.');
+        };
+
+        if (data.geonames.length) {
+          toSave.name = data.geonames[0].name;
         }
+
+        save(JSON.stringify(toSave));
       });
     };
 
