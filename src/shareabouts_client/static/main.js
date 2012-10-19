@@ -17,7 +17,10 @@ var BigRedButton = BigRedButton || {};
             lng: position.coords.longitude
           },
           accuracy: position.coords.accuracy
-        })
+        }),
+        success: function() {
+          alert('It is now known.');
+        }
       });
     };
 
