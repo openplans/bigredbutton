@@ -19,7 +19,7 @@ var BigRedButton = BigRedButton || {};
           accuracy: position.coords.accuracy
         }),
         success: function() {
-          alert('It is now known.');
+          alert('It is known.');
         }
       });
     };
