@@ -21,10 +21,27 @@ var BigRedButton = BigRedButton || {};
   };
 
   var reverseGeocode = function(lat, lng, callback) {
-    var url = 'http://api.geonames.org/findNearbyJSON?lat='+lat+
+    var url = 'http://api.geonames.org/findNearestAddressJSON?lat='+lat+
       '&lng='+lng+'&username=openplans&callback=?';
 
-    $.getJSON(url, callback);
+    $.getJSON(url, function(data) {
+      var address = [],
+          props = ['streetNumber', 'street', 'adminName2', 'adminCode1'];
+
+      if (data.address) {
+        $.each(props, function(i, prop) {
+          if (data.address[prop]) {
+            address.push(data.address[prop]);
+          }
+        });
+
+        data.address.formattedAddress = address.join(' ');
+      } else {
+        data = null;
+      }
+
+      callback(data);
+    });
   };
 
   var getAccurateLocation = function() {
@@ -41,8 +58,9 @@ var BigRedButton = BigRedButton || {};
           submitter_name: ip
         };
 
-        if (data.geonames.length) {
-          toSave.name = data.geonames[0].name;
+        if (data) {
+          $.extend(toSave, data.address);
+          toSave.name = data.address.formattedAddress;
         }
 
         save(JSON.stringify(toSave));
