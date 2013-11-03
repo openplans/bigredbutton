@@ -1,9 +1,3 @@
-{% load jstemplate %}
-{% load compress %}
-{% load i18n %}
-{% load url from future %}
-{% load shareabouts_utils %}
-
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="en" class="ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="ie7"> <![endif]-->
@@ -19,13 +13,12 @@
 
   <title>Big Red Button</title>
 
-  <link href="{{ STATIC_URL }}lib/bootstrap-2.1.1/css/bootstrap.min.css" rel="stylesheet">
-  <link href="{{ STATIC_URL }}lib/bootstrap-2.1.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-  <link href="{{ STATIC_URL }}style.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
 </head>
 <body>
   <div id="content" class="container">
@@ -36,9 +29,10 @@
 
   </div> <!-- /container -->
 
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
 
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-  <script src="{{ STATIC_URL }}lib/bootstrap-2.1.1/js/bootstrap.js"></script>
-  <script src="{{ STATIC_URL }}main.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
