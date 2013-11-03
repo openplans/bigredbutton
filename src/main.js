@@ -8,7 +8,9 @@ var BigRedButton = BigRedButton || {};
 
   var save = function(data) {
       $.ajax({
-        url: '/api/places/',
+//        url: 'http://api.shareabouts.org/api/v2/demo-user/datasets/bigredbutton/places',
+        url: 'http://devsaapi-civicworks.dotcloud.com/api/v2/demo-user/datasets/demo-data/places',
+//        url: 'http://127.0.0.1:8000/api/v2/demo-user/datasets/demo-data/places',
         type: 'POST',
         dataType: 'json',
         contentType: 'application/json',
