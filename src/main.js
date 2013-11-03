@@ -48,14 +48,16 @@ var BigRedButton = BigRedButton || {};
     var onSuccess = function(position) {
       reverseGeocode(position.coords.latitude, position.coords.longitude, function(data) {
         var toSave = {
-          visible: true,
-          location_type: 'bikeshare',
-          location: {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [position.coords.longitude, position.coords.latitude]
           },
-          accuracy: position.coords.accuracy,
-          submitter_name: ip
+          properties: {
+            location_type: 'bikeshare',
+            accuracy: position.coords.accuracy,
+            submitter_name: ip
+          }
         };
 
         if (data) {
