@@ -139,14 +139,18 @@ jQuery(document).ajaxSend(function(event, xhr, settings) {
     function safeMethod(method) {
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
+    function emptyMethod(method) {
+      return (/^(OPTIONS|DELETE)$/.test(method));
+    }
 
     if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     }
 
     // If this is a DELETE request, explicitly set the data to be sent so that
-    // the browser will calculate a value for the Content-Length header.
-    if (settings.type === 'DELETE') {
+    // the browser will calculate a value for the Content-Length header. Same
+    // goes with OPTIONS requests.
+    if (emptyMethod(settings.type)) {
         xhr.setRequestHeader("Content-Type", "application/json");
         settings.data = '{}';
     }
