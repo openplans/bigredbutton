@@ -7,14 +7,6 @@ var main = function(B, $) {
     ip = data.ip;
   };
 
-  var user;
-  var setUser = function(data) {
-    user = data;
-    if (data) {
-      $('#user-info').html('<img src="' + data['avatar_url'] + '"> | <a href="http://devsaapi-civicworks.dotcloud.com/api/v2/users/logout">Logout</a>');
-    }
-  };
-
   var save = function(data) {
       $.ajax({
 //        url: 'http://api.shareabouts.org/api/v2/demo-user/datasets/bigredbutton/places',
@@ -184,7 +176,6 @@ var main = function(B, $) {
   }
 
   $.getJSON('http://jsonip.com/?callback=?', setIp);
-  $.getJSON('http://devsaapi-civicworks.dotcloud.com/api/v2/users/current', setUser);
 
 };
 
