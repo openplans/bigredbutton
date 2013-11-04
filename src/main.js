@@ -17,7 +17,11 @@ var BigRedButton = BigRedButton || {};
         processData: false,
         data: data,
         success: function() {
+          finishStep($('#save-information'));
           alert('It is known.');
+        },
+        error: function() {
+          failStep($('#save-information'));
         }
       });
   };
@@ -43,12 +47,94 @@ var BigRedButton = BigRedButton || {};
       }
 
       callback(data);
-    });
+    })
+
+      // jqXhr request failure handler
+      .fail(function() {
+        failStep($('#find-address'));
+      });
+  };
+
+  var startStep = function($step) {
+    var opts = {
+      lines: 13, // The number of lines to draw
+      length: 0, // The length of each line
+      width: 2, // The line thickness
+      radius: 8, // The radius of the inner circle
+      corners: 1, // Corner roundness (0..1)
+      rotate: 0, // The rotation offset
+      direction: 1, // 1: clockwise, -1: counterclockwise
+      color: '#000', // #rgb or #rrggbb or array of colors
+      speed: 1, // Rounds per second
+      trail: 60, // Afterglow percentage
+      shadow: false, // Whether to render a shadow
+      hwaccel: false, // Whether to use hardware acceleration
+      className: 'inner-spinner', // The CSS class to assign to the spinner
+      zIndex: 2e9, // The z-index (defaults to 2000000000)
+      top: 'auto', // Top position relative to parent in px
+      left: 'auto' // Left position relative to parent in px
+    }, spinner, $container;
+
+    resetStep($step)
+      .removeClass('not-started')
+      .addClass('started');
+    
+    $container = $('<span class="spinner"></span>').prependTo($step);
+    spinner = new Spinner(opts).spin($container[0]);
+
+    return $step;
+  };
+
+  var finishStep = function($step) {
+    resetStep($step)
+      .removeClass('not-started')
+      .addClass('done');
+
+    $step.find('.badge')
+      .html('<span class="glyphicon glyphicon-ok-circle"></span>');
+
+    return $step;
+  };
+
+  var failStep = function($step) {
+    resetStep($step)
+      .removeClass('not-started')
+      .addClass('failed');
+
+    $step.find('.badge')
+      .html('<span class="glyphicon glyphicon-remove-circle"></span>');
+
+    return $step;
+  };
+
+  var resetStep = function($step) {
+    $step.find('.badge').empty();
+    $step.find('.spinner').remove();
+    return $step
+      .removeClass('started done failed')
+      .addClass('not-started');
+  };
+
+  var resetSteps = function() {
+    $('.step .badge').empty();
+    $('.step').find('.spinner').remove();
+    $('.step')
+      .removeClass('started done failed')
+      .addClass('not-started');
   };
 
   var getAccurateLocation = function() {
+    resetSteps();
+    startStep($('#get-latlng'));
+
     var onSuccess = function(position) {
+      finishStep($('#get-latlng'));
+      startStep($('#find-address'));
+
       reverseGeocode(position.coords.latitude, position.coords.longitude, function(data) {
+        finishStep($('#find-address'));
+        startStep($('#save-information'));
+
         var toSave = {
           type: 'Feature',
           geometry: {
@@ -72,6 +158,7 @@ var BigRedButton = BigRedButton || {};
     };
 
     var onError = function() {
+      failStep($('#get-latlng'));
       console.log('error', arguments);
     };
 

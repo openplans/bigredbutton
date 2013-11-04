@@ -13,6 +13,66 @@
   font-size: 2.5em;
 }
 
+.action-section {
+  display: inline-block;
+}
+
+.action-section .list-group {
+  margin-top: 2em;
+}
+
+.step {
+  text-align: left;
+}
+
+.step.not-started {
+  color: silver;
+}
+
+.step.started {
+  color: #fff;
+  background-color: #3276b1;
+  border-color: #285e8e;
+}
+.started .badge {
+  background-color: #fff;
+  color: #3276b1;
+}
+
+.step.done {
+  color: #fff;
+  background-color: #47a447;
+  border-color: #398439;
+}
+.done .badge {
+  background-color: #fff;
+  color: #47a447;
+}
+
+.step.failed {
+  color: #fff;
+  background-color: #d2322d;
+  border-color: #ac2925;
+}
+.failed .badge {
+  background-color: #fff;
+  color: #d2322d;
+}
+
+.step .spinner {
+  float: right;
+  min-width: 10px;
+  padding: 9px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  position: relative;
+}
+
 @media (min-width: 480px) {
   #title {
     font-size: 5.5em;
