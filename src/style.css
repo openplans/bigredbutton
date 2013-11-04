@@ -73,6 +73,10 @@
   position: relative;
 }
 
+.user-info img {
+  width: 24px;
+}
+
 @media (min-width: 480px) {
   #title {
     font-size: 5.5em;

@@ -1,9 +1,18 @@
 var BigRedButton = BigRedButton || {};
 
-(function(B, $) {
+// Run the main function after doing the jQuery ajax setup.
+var main = function(B, $) {
   var ip = 'Not Set';
   var setIp = function(data) {
     ip = data.ip;
+  };
+
+  var user;
+  var setUser = function(data) {
+    user = data;
+    if (data) {
+      $('#user-info').html('<img src="' + data['avatar_url'] + '"> | <a href="http://devsaapi-civicworks.dotcloud.com/api/v2/users/logout">Logout</a>');
+    }
   };
 
   var save = function(data) {
@@ -175,8 +184,9 @@ var BigRedButton = BigRedButton || {};
   }
 
   $.getJSON('http://jsonip.com/?callback=?', setIp);
+  $.getJSON('http://devsaapi-civicworks.dotcloud.com/api/v2/users/current', setUser);
 
-})(BigRedButton, jQuery);
+};
 
 /*****************************************************************************
 
@@ -250,5 +260,11 @@ jQuery(document).ajaxSend(function(event, xhr, settings) {
 // it won't even send send requests to the server and just assume that
 // the content has not changed and return a 304. So strange. So sad.
 jQuery.ajaxSetup ({
-  cache: false
+  cache: false,
+  xhrFields: {
+    // Send cookies with cross-origin requests.
+    withCredentials: true
+  }
 });
+
+main(BigRedButton, jQuery);
