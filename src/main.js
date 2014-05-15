@@ -10,8 +10,9 @@ var main = function(B, $) {
   var save = function(data) {
       $.ajax({
 //        url: 'http://api.shareabouts.org/api/v2/demo-user/datasets/bigredbutton/places',
-        url: 'http://devsaapi-civicworks.dotcloud.com/api/v2/demo-user/datasets/demo-data/places',
+//        url: 'http://devsaapi-civicworks.dotcloud.com/api/v2/demo-user/datasets/demo-data/places',
 //        url: 'http://127.0.0.1:8000/api/v2/demo-user/datasets/demo-data/places',
+        url: 'http://data.shareabouts.org/api/v2/mjumbewu/datasets/philly-bike-share/places',
         type: 'POST',
         dataType: 'json',
         contentType: 'application/json',
@@ -143,7 +144,7 @@ var main = function(B, $) {
             coordinates: [position.coords.longitude, position.coords.latitude]
           },
           properties: {
-            location_type: 'bikeshare',
+            location_type: 'bigredbutton-press',
             accuracy: position.coords.accuracy,
             submitter_name: ip
           }
