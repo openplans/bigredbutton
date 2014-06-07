@@ -1,6 +1,7 @@
 var BigRedButton = BigRedButton || {};
 
-(function(B, $) {
+// Run the main function after doing the jQuery ajax setup.
+var main = function(B, $) {
   var ip = 'Not Set';
   var setIp = function(data) {
     ip = data.ip;
@@ -8,14 +9,19 @@ var BigRedButton = BigRedButton || {};
 
   var save = function(data) {
       $.ajax({
-        url: '/api/places/',
+//        url: 'http://data.shareabouts.org/api/v2/demo-user/datasets/demo-data/places',
+        url: 'http://data.shareabouts.org/api/v2/mjumbewu/datasets/philly-bike-share/places',
         type: 'POST',
         dataType: 'json',
         contentType: 'application/json',
         processData: false,
         data: data,
         success: function() {
+          finishStep($('#save-information'));
           alert('It is known.');
+        },
+        error: function() {
+          failStep($('#save-information'));
         }
       });
   };
@@ -41,21 +47,105 @@ var BigRedButton = BigRedButton || {};
       }
 
       callback(data);
-    });
+    })
+
+      // jqXhr request failure handler
+      .fail(function() {
+        failStep($('#find-address'));
+      });
+  };
+
+  var startStep = function($step) {
+    var opts = {
+      lines: 13, // The number of lines to draw
+      length: 0, // The length of each line
+      width: 2, // The line thickness
+      radius: 8, // The radius of the inner circle
+      corners: 1, // Corner roundness (0..1)
+      rotate: 0, // The rotation offset
+      direction: 1, // 1: clockwise, -1: counterclockwise
+      color: '#000', // #rgb or #rrggbb or array of colors
+      speed: 1, // Rounds per second
+      trail: 60, // Afterglow percentage
+      shadow: false, // Whether to render a shadow
+      hwaccel: false, // Whether to use hardware acceleration
+      className: 'inner-spinner', // The CSS class to assign to the spinner
+      zIndex: 2e9, // The z-index (defaults to 2000000000)
+      top: 'auto', // Top position relative to parent in px
+      left: 'auto' // Left position relative to parent in px
+    }, spinner, $container;
+
+    resetStep($step)
+      .removeClass('not-started')
+      .addClass('started');
+
+    $container = $('<span class="spinner"></span>').prependTo($step);
+    spinner = new Spinner(opts).spin($container[0]);
+
+    return $step;
+  };
+
+  var finishStep = function($step) {
+    resetStep($step)
+      .removeClass('not-started')
+      .addClass('done');
+
+    $step.find('.badge')
+      .html('<span class="glyphicon glyphicon-ok-circle"></span>');
+
+    return $step;
+  };
+
+  var failStep = function($step) {
+    resetStep($step)
+      .removeClass('not-started')
+      .addClass('failed');
+
+    $step.find('.badge')
+      .html('<span class="glyphicon glyphicon-remove-circle"></span>');
+
+    return $step;
+  };
+
+  var resetStep = function($step) {
+    $step.find('.badge').empty();
+    $step.find('.spinner').remove();
+    return $step
+      .removeClass('started done failed')
+      .addClass('not-started');
+  };
+
+  var resetSteps = function() {
+    $('.step .badge').empty();
+    $('.step').find('.spinner').remove();
+    $('.step')
+      .removeClass('started done failed')
+      .addClass('not-started');
   };
 
   var getAccurateLocation = function() {
+    resetSteps();
+    startStep($('#get-latlng'));
+
     var onSuccess = function(position) {
+      finishStep($('#get-latlng'));
+      startStep($('#find-address'));
+
       reverseGeocode(position.coords.latitude, position.coords.longitude, function(data) {
+        finishStep($('#find-address'));
+        startStep($('#save-information'));
+
         var toSave = {
-          visible: true,
-          location_type: 'bikeshare',
-          location: {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [position.coords.longitude, position.coords.latitude]
           },
-          accuracy: position.coords.accuracy,
-          submitter_name: ip
+          properties: {
+            location_type: 'bigredbutton-press',
+            accuracy: position.coords.accuracy,
+            submitter_name: ip
+          }
         };
 
         if (data) {
@@ -68,6 +158,7 @@ var BigRedButton = BigRedButton || {};
     };
 
     var onError = function() {
+      failStep($('#get-latlng'));
       console.log('error', arguments);
     };
 
@@ -85,7 +176,7 @@ var BigRedButton = BigRedButton || {};
 
   $.getJSON('http://jsonip.com/?callback=?', setIp);
 
-})(BigRedButton, jQuery);
+};
 
 /*****************************************************************************
 
@@ -137,14 +228,18 @@ jQuery(document).ajaxSend(function(event, xhr, settings) {
     function safeMethod(method) {
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
+    function emptyMethod(method) {
+      return (/^(OPTIONS|DELETE)$/.test(method));
+    }
 
     if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     }
 
     // If this is a DELETE request, explicitly set the data to be sent so that
-    // the browser will calculate a value for the Content-Length header.
-    if (settings.type === 'DELETE') {
+    // the browser will calculate a value for the Content-Length header. Same
+    // goes with OPTIONS requests.
+    if (emptyMethod(settings.type)) {
         xhr.setRequestHeader("Content-Type", "application/json");
         settings.data = '{}';
     }
@@ -155,5 +250,11 @@ jQuery(document).ajaxSend(function(event, xhr, settings) {
 // it won't even send send requests to the server and just assume that
 // the content has not changed and return a 304. So strange. So sad.
 jQuery.ajaxSetup ({
-  cache: false
+  cache: false,
+  xhrFields: {
+    // Send cookies with cross-origin requests.
+    withCredentials: true
+  }
 });
+
+main(BigRedButton, jQuery);
