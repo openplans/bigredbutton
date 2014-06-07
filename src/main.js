@@ -9,9 +9,7 @@ var main = function(B, $) {
 
   var save = function(data) {
       $.ajax({
-//        url: 'http://api.shareabouts.org/api/v2/demo-user/datasets/bigredbutton/places',
-//        url: 'http://devsaapi-civicworks.dotcloud.com/api/v2/demo-user/datasets/demo-data/places',
-//        url: 'http://127.0.0.1:8000/api/v2/demo-user/datasets/demo-data/places',
+//        url: 'http://data.shareabouts.org/api/v2/demo-user/datasets/demo-data/places',
         url: 'http://data.shareabouts.org/api/v2/mjumbewu/datasets/philly-bike-share/places',
         type: 'POST',
         dataType: 'json',
@@ -80,7 +78,7 @@ var main = function(B, $) {
     resetStep($step)
       .removeClass('not-started')
       .addClass('started');
-    
+
     $container = $('<span class="spinner"></span>').prependTo($step);
     spinner = new Spinner(opts).spin($container[0]);
 
